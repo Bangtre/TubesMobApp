@@ -15,7 +15,10 @@ class ScreenPage extends StatefulWidget {
 class _ScreenPageState extends State<ScreenPage> {
   GoogleMapController googleMapController;
   Marker _marker;
-  String _placeDistance;
+  double _placeDistance;
+  double distance;
+  String jarakLine;
+  int langkah;
   final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -26,7 +29,7 @@ class _ScreenPageState extends State<ScreenPage> {
   List<LatLng> _myRoutes = List();
   Position _lastPosition;
   jarak() {
-    String _placeDistance;
+    double _placeDistance;
     double totalDistance = 0.0;
     for (int i = 0; i < _myRoutes.length - 1; i++) {
       totalDistance += _coordinateDistance(
@@ -36,7 +39,7 @@ class _ScreenPageState extends State<ScreenPage> {
         _myRoutes[i + 1].longitude,
       );
     }
-    _placeDistance = totalDistance.toStringAsFixed(2);
+    _placeDistance = totalDistance;
     print('DISTANCE: $_placeDistance km');
   }
 
@@ -94,10 +97,13 @@ class _ScreenPageState extends State<ScreenPage> {
         _myRoutes[i + 1].longitude,
       );
       setState(() {
-        _placeDistance = totalDistance.toStringAsFixed(2);
+        _placeDistance = totalDistance;
         print('DISTANCE: $_placeDistance km');
       });
     }
+    distance = _placeDistance / .0005;
+    jarakLine = _placeDistance.toStringAsFixed(2);
+    langkah = distance.round();
   }
 
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
@@ -159,7 +165,14 @@ class _ScreenPageState extends State<ScreenPage> {
           Padding(
             padding: EdgeInsets.fromLTRB(40, 20, 20, 20),
             child: Text(
-              'Jarak ditempuh: $_placeDistance KM',
+              'Jarak ditempuh: $jarakLine KM',
+              style: TextStyle(fontSize: 22),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(40, 20, 20, 20),
+            child: Text(
+              'step : $langkah',
               style: TextStyle(fontSize: 22),
             ),
           )
